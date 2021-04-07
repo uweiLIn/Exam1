@@ -20,6 +20,10 @@ int main()
 {   
     float f = 1.0 / T;
     int i = 1;
+    float ADCdata[500];
+    char store = 0;
+    int l = 0;
+    int j = 1;
     
     
 
@@ -72,6 +76,7 @@ int main()
         if (pin_sel){
             sl_rate = sl_rate_pre;
             uLCD.printf(" Slew rate is %f \n", sl_rate);
+            store = 1;
         }
 
         if (sl_rate == 1) {
@@ -92,7 +97,22 @@ int main()
         }
         if (i > 240) i = 1;
         wait_us(988);
-    i++;
+
+        if (j == 500) {
+            j = 0;
+            l = 0;
+        } else if (l % 3 == 0) { 
+                ADCdata[j] = aout;
+                j++;       
+        }
+        if (store == 1 ) {          
+            for(int k = 0; k < 500; k++) {
+                printf("%lf\r\n", ADCdata[k]);
+            }
+            store = 0;           
+        }
+        i++;
+        l++;
     }
 }
    
